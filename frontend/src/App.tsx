@@ -137,10 +137,14 @@ function App() {
               value={city}
               onChange={(e) => setCity(e.target.value)}
             />
+            
             <button onClick={handleSearch} disabled={loading}>
               {loading ? "Searching..." : "Search"}
             </button>
           </div>
+          <p className="helper-text">
+  Try: London, Manchester, Birmingham, Liverpool, Leeds, Bristol
+</p>
 
           {loading && <p className="status-message">Loading city data...</p>}
           {error && <p className="error-message">{error}</p>}

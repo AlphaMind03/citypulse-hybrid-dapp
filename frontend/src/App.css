@@ -331,3 +331,9 @@ body {
     font-size: 1rem;
   }
 }
+.helper-text {
+  text-align: center;
+  margin-top: 12px;
+  color: #94a3b8;
+  font-size: 0.92rem;
+}
