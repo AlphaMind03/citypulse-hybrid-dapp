@@ -26,3 +26,17 @@ export interface CityPulseResponse {
   seismic: SeismicData;
   daylight: DaylightData;
 }
+
+export interface BlockchainRecordRequest {
+  city: string;
+  weather: WeatherData;
+  seismic: SeismicData;
+  daylight: DaylightData;
+}
+
+export interface BlockchainRecordResponse {
+  success: boolean;
+  message: string;
+  txId: string;
+  recordedAt: string;
+}

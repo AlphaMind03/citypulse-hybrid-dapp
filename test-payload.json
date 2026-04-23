@@ -1,0 +1,22 @@
+{
+  "city": "london",
+  "weather": {
+    "city": "london",
+    "temperature": 18,
+    "humidity": 81,
+    "wind": 12,
+    "rain": 67
+  },
+  "seismic": {
+    "city": "london",
+    "magnitude": 1.4,
+    "latitude": "53.275",
+    "longitude": "6.348"
+  },
+  "daylight": {
+    "city": "london",
+    "sunrise": "06:10",
+    "sunset": "19:58",
+    "daylightHours": "13h 48m"
+  }
+}

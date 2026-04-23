@@ -2,7 +2,12 @@ import { Request, Response } from "express";
 import { getWeatherData } from "../services/weatherService";
 import { getSeismicData } from "../services/seismicService";
 import { getDaylightData } from "../services/daylightService";
-import { CityPulseResponse } from "../types/cityPulseTypes";
+import { recordCityDataOnBlockchain } from "../services/blockchainService";
+import {
+  CityPulseResponse,
+  BlockchainRecordRequest,
+} from "../types/cityPulseTypes";
+
 
 type CityParams = {
   city: string;
@@ -52,4 +57,15 @@ export const getCityPulseData = (
   };
 
   res.status(200).json(response);
+};
+
+export const recordCityPulseData = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const payload: BlockchainRecordRequest = req.body;
+
+  const result = await recordCityDataOnBlockchain(payload);
+
+  res.status(200).json(result);
 };
