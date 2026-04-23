@@ -1,0 +1,1 @@
+// Reserved for future global types if needed.
