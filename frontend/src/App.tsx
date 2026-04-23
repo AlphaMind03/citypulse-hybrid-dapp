@@ -52,6 +52,9 @@ function App() {
     try {
       setLoading(true);
       setError("");
+      setBlockchainMessage("");
+      setTransactionId("");
+      setRecordedAt("");
 
       const response = await fetch(
         `${API_BASE_URL}/api/city/${city.trim().toLowerCase()}`
@@ -70,104 +73,193 @@ function App() {
       setLoading(false);
     }
   };
+
   const handleRecordOnBlockchain = async () => {
-  if (!cityData) {
-    setBlockchainMessage("Please search for a city first.");
-    setTransactionId("");
-    setRecordedAt("");
-    return;
-  }
-
-  try {
-    setRecording(true);
-    setBlockchainMessage("");
-    setTransactionId("");
-    setRecordedAt("");
-
-    const response = await fetch(`${API_BASE_URL}/api/blockchain/record`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(cityData),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to record city data.");
+    if (!cityData) {
+      setBlockchainMessage("Please search for a city first.");
+      setTransactionId("");
+      setRecordedAt("");
+      return;
     }
 
-    const result = await response.json();
+    try {
+      setRecording(true);
+      setBlockchainMessage("");
+      setTransactionId("");
+      setRecordedAt("");
 
-    setBlockchainMessage(result.message);
-    setTransactionId(result.txId);
-    setRecordedAt(result.recordedAt);
-  } catch (err) {
-    setBlockchainMessage("Something went wrong while recording data.");
-    setTransactionId("");
-    setRecordedAt("");
-  } finally {
-    setRecording(false);
-  }
-};
+      const response = await fetch(`${API_BASE_URL}/api/blockchain/record`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cityData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to record city data.");
+      }
+
+      const result = await response.json();
+
+      setBlockchainMessage(result.message);
+      setTransactionId(result.txId);
+      setRecordedAt(result.recordedAt);
+    } catch (err) {
+      setBlockchainMessage("Something went wrong while recording data.");
+      setTransactionId("");
+      setRecordedAt("");
+    } finally {
+      setRecording(false);
+    }
+  };
 
   return (
-    <div className="app">
-      <header className="hero">
-        <h1>CityPulse</h1>
-        <p>A hybrid Algorand DApp for trusted city intelligence.</p>
-      </header>
+    <div className="app-shell">
+      <div className="background-glow glow-one"></div>
+      <div className="background-glow glow-two"></div>
 
-      <section className="search-section">
-        <input
-          type="text"
-          placeholder="Enter a city name"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-      </section>
+      <main className="dashboard">
+        <header className="hero">
+          <div className="hero-badge">Hybrid Algorand DApp</div>
+          <h1>CityPulse</h1>
+          <p>
+            Trusted city intelligence powered by a React frontend, structured backend,
+            and blockchain recording flow.
+          </p>
+        </header>
 
-      {loading && <p className="status-message">Loading city data...</p>}
-      {error && <p className="error-message">{error}</p>}
+        <section className="search-panel">
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="Enter a city name"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+            <button onClick={handleSearch} disabled={loading}>
+              {loading ? "Searching..." : "Search"}
+            </button>
+          </div>
 
-      <section className="cards-grid">
-        <div className="card">
-          <h2>Weather Data</h2>
-          <p>City: {cityData?.weather.city ?? "--"}</p>
-          <p>Temperature: {cityData?.weather.temperature ?? "--"}</p>
-          <p>Humidity: {cityData?.weather.humidity ?? "--"}</p>
-          <p>Wind: {cityData?.weather.wind ?? "--"}</p>
-          <p>Rain: {cityData?.weather.rain ?? "--"}</p>
-        </div>
+          {loading && <p className="status-message">Loading city data...</p>}
+          {error && <p className="error-message">{error}</p>}
+        </section>
 
-        <div className="card">
-          <h2>Seismic Data</h2>
-          <p>City: {cityData?.seismic.city ?? "--"}</p>
-          <p>Magnitude: {cityData?.seismic.magnitude ?? "--"}</p>
-          <p>Latitude: {cityData?.seismic.latitude ?? "--"}</p>
-          <p>Longitude: {cityData?.seismic.longitude ?? "--"}</p>
-        </div>
+        <section className="cards-grid">
+          <article className="card">
+            <div className="card-header">
+              <h2>Weather Data</h2>
+              <span className="card-tag">Live Route</span>
+            </div>
+            <div className="card-content">
+              <div className="data-row">
+                <span>City</span>
+                <strong>{cityData?.weather.city ?? "--"}</strong>
+              </div>
+              <div className="data-row">
+                <span>Temperature</span>
+                <strong>{cityData?.weather.temperature ?? "--"}</strong>
+              </div>
+              <div className="data-row">
+                <span>Humidity</span>
+                <strong>{cityData?.weather.humidity ?? "--"}</strong>
+              </div>
+              <div className="data-row">
+                <span>Wind</span>
+                <strong>{cityData?.weather.wind ?? "--"}</strong>
+              </div>
+              <div className="data-row">
+                <span>Rain</span>
+                <strong>{cityData?.weather.rain ?? "--"}</strong>
+              </div>
+            </div>
+          </article>
 
-        <div className="card">
-          <h2>Daylight Data</h2>
-          <p>City: {cityData?.daylight.city ?? "--"}</p>
-          <p>Sunrise: {cityData?.daylight.sunrise ?? "--"}</p>
-          <p>Sunset: {cityData?.daylight.sunset ?? "--"}</p>
-          <p>Daylight Hours: {cityData?.daylight.daylightHours ?? "--"}</p>
-        </div>
-      </section>
+          <article className="card">
+            <div className="card-header">
+              <h2>Seismic Data</h2>
+              <span className="card-tag">Live Route</span>
+            </div>
+            <div className="card-content">
+              <div className="data-row">
+                <span>City</span>
+                <strong>{cityData?.seismic.city ?? "--"}</strong>
+              </div>
+              <div className="data-row">
+                <span>Magnitude</span>
+                <strong>{cityData?.seismic.magnitude ?? "--"}</strong>
+              </div>
+              <div className="data-row">
+                <span>Latitude</span>
+                <strong>{cityData?.seismic.latitude ?? "--"}</strong>
+              </div>
+              <div className="data-row">
+                <span>Longitude</span>
+                <strong>{cityData?.seismic.longitude ?? "--"}</strong>
+              </div>
+            </div>
+          </article>
 
-      <section className="blockchain-section">
-  <h2>Blockchain Record</h2>
-  <p>
-    {blockchainMessage || "No transaction recorded yet."}
-  </p>
-  {transactionId && <p>Transaction ID: {transactionId}</p>}
-  {recordedAt && <p>Recorded At: {recordedAt}</p>}
-  <button onClick={handleRecordOnBlockchain} disabled={recording}>
-    {recording ? "Recording..." : "Record on Blockchain"}
-  </button>
-</section>
+          <article className="card">
+            <div className="card-header">
+              <h2>Daylight Data</h2>
+              <span className="card-tag">Live Route</span>
+            </div>
+            <div className="card-content">
+              <div className="data-row">
+                <span>City</span>
+                <strong>{cityData?.daylight.city ?? "--"}</strong>
+              </div>
+              <div className="data-row">
+                <span>Sunrise</span>
+                <strong>{cityData?.daylight.sunrise ?? "--"}</strong>
+              </div>
+              <div className="data-row">
+                <span>Sunset</span>
+                <strong>{cityData?.daylight.sunset ?? "--"}</strong>
+              </div>
+              <div className="data-row">
+                <span>Daylight Hours</span>
+                <strong>{cityData?.daylight.daylightHours ?? "--"}</strong>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section className="blockchain-panel">
+          <div className="blockchain-top">
+            <div>
+              <p className="section-label">Blockchain Record</p>
+              <h2>Record current city data</h2>
+            </div>
+            <button
+              className="record-button"
+              onClick={handleRecordOnBlockchain}
+              disabled={recording}
+            >
+              {recording ? "Recording..." : "Record on Blockchain"}
+            </button>
+          </div>
+
+          <div className="blockchain-status">
+            <p className="blockchain-message">
+              {blockchainMessage || "No transaction recorded yet."}
+            </p>
+
+            <div className="meta-grid">
+              <div className="meta-card">
+                <span>Transaction ID</span>
+                <strong>{transactionId || "--"}</strong>
+              </div>
+              <div className="meta-card">
+                <span>Recorded At</span>
+                <strong>{recordedAt || "--"}</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
